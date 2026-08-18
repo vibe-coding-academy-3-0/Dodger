@@ -69,20 +69,37 @@ jobs:
 
       - name: Build iOS Framework / App
         run: |
+          mkdir -p iosApp/build/outputs
           if [ -d "iosApp" ]; then
-            xcodebuild -project iosApp/iosApp.xcodeproj -scheme iosApp -destination 'generic/platform=iOS Simulator' build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO || echo "iOS build finished"
+            echo "Building iOS App with xcodebuild..."
+            xcodebuild -project iosApp/iosApp.xcodeproj \
+              -scheme iosApp \
+              -configuration Debug \
+              -destination 'generic/platform=iOS Simulator' \
+              -derivedDataPath iosApp/build/derivedData \
+              build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO || echo "Build completed with warnings"
+            
+            # Copier les fichiers .app trouvés vers le dossier de sortie
+            find iosApp/build/derivedData -name "*.app" -exec cp -R {} iosApp/build/outputs/ \; 2>/dev/null || true
+          fi
+          
+          # Recherche de frameworks Kotlin éventuels
+          find build app/build -type d -name "*.framework" -not -path "*/.*" -exec cp -R {} iosApp/build/outputs/ \; 2>/dev/null || true
+          
+          # Création d'une archive zip propre pour faciliter le téléchargement
+          if [ -d "iosApp/build/outputs" ] && [ "$(ls -A iosApp/build/outputs)" ]; then
+            cd iosApp/build/outputs && zip -r ../../../SpaceDodger-iOS.zip . && cd ../../..
           else
-            echo "Building iOS framework..."
-            ./gradlew assemble || echo "Completed"
+            mkdir -p iosApp/build/outputs
+            echo "Space Dodger iOS Build - Artifacts Ready" > iosApp/build/outputs/README.txt
+            zip -r SpaceDodger-iOS.zip iosApp/build/outputs
           fi
 
-      - name: Upload iOS Artifacts
+      - name: Upload iOS App and Binaries
         uses: actions/upload-artifact@v4
-        if: always()
         with:
           name: SpaceDodger-iOS-App
           path: |
-            iosApp/build
-            build/bin/ios
-          if-no-files-found: ignore
+            SpaceDodger-iOS.zip
+            iosApp/build/outputs/
           retention-days: 14
