@@ -1,0 +1,6 @@
+{
+  "name": "Space Dodger",
+  "description": "Un jeu de vaisseau 2D rétro-futuriste d'esquive d'astéroïdes et de collecte de bonus.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#0B0E1B"
+        android:pathData="M0,0h108v108h-108z" />
+    <path
+        android:fillColor="#1A1F3C"
+        android:pathData="M0,0 L108,108 L108,0 Z" />
+    <!-- Distant Stars -->
+    <path
+        android:fillColor="#4DD0E1"
+        android:pathData="M18,22l1.5,0l0,1.5l-1.5,0z M82,15l2,0l0,2l-2,0z M25,85l1.5,0l0,1.5l-1.5,0z M90,75l2,0l0,2l-2,0z M52,12l1,0l0,1l-1,0z M12,50l1,0l0,1l-1,0z M95,40l1,0l0,1l-1,0z" />
+    <path
+        android:fillColor="#FFD54F"
+        android:pathData="M40,28l2,0l0,2l-2,0z M70,88l1.5,0l0,1.5l-1.5,0z M88,52l2,0l0,2l-2,0z M15,70l1,0l0,1l-1,0z" />
+</vector>

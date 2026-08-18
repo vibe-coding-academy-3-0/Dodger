@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    
+    <!-- Thruster Flame -->
+    <path
+        android:fillColor="#FF5722"
+        android:pathData="M54,74 L48,88 L54,84 L60,88 Z" />
+    <path
+        android:fillColor="#FFC107"
+        android:pathData="M54,74 L50,83 L54,80 L58,83 Z" />
+
+    <!-- Space Ship Body -->
+    <path
+        android:fillColor="#00E676"
+        android:pathData="M54,26 L66,68 L54,60 L42,68 Z" />
+    
+    <!-- Wings / Cockpit Detail -->
+    <path
+        android:fillColor="#00E5FF"
+        android:pathData="M54,34 L60,56 L54,52 L48,56 Z" />
+        
+    <!-- Shield Aura Glow (outer ring) -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#00E5FF"
+        android:strokeWidth="2"
+        android:pathData="M54,20 C72,20 84,36 84,54 C84,72 72,84 54,84 C36,84 24,72 24,54 C24,36 36,20 54,20 Z" />
+
+    <!-- Asteroids dodging in background -->
+    <path
+        android:fillColor="#8D6E63"
+        android:pathData="M22,30 L28,24 L34,28 L32,36 L24,38 Z" />
+    <path
+        android:fillColor="#78909C"
+        android:pathData="M78,65 L86,60 L92,66 L88,74 L80,72 Z" />
+
+    <!-- Bonus Star -->
+    <path
+        android:fillColor="#FFD54F"
+        android:pathData="M80,25 L82,29 L86,30 L83,33 L84,37 L80,35 L76,37 L77,33 L74,30 L78,29 Z" />
+
+</vector>
