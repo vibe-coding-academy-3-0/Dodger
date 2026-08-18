@@ -90,16 +90,21 @@ jobs:
         run: |
           cd iosApp
           mkdir -p Payload
-          # Trouver automatiquement le dossier .app généré
-          APP_PATH=$(find build -name "*.app" -type d | head -n 1)
-          echo "Application trouvée ici : $APP_PATH"
-          if [ -n "$APP_PATH" ]; then
-            cp -R "$APP_PATH" Payload/
-            zip -r iosApp-unsigned.ipa Payload
-            echo "Taille du fichier IPA généré :"
+          # Ciblage strict du vrai dossier final
+          TARGET_APP="build/Build/Products/Release-iphoneos/iosApp.app"
+          
+          echo "Vérification du dossier cible : $TARGET_APP"
+          if [ -d "$TARGET_APP" ]; then
+            echo "Dossier .app trouvé ! Voici son contenu réel :"
+            ls -la "$TARGET_APP"
+            
+            cp -R "$TARGET_APP" Payload/
+            zip -q -r iosApp-unsigned.ipa Payload
+            
+            echo "Taille finale du fichier IPA généré :"
             ls -lh iosApp-unsigned.ipa
           else
-            echo "Erreur : Aucun dossier .app trouvé !"
+            echo "ERREUR CRITIQUE : Le vrai dossier $TARGET_APP n'existe pas. Le build Xcode a échoué silencieusement ou a compilé ailleurs."
             exit 1
           fi
 
