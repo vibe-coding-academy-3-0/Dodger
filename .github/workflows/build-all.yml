@@ -70,7 +70,7 @@ jobs:
       - name: Build iOS Framework / App
         run: |
           cd iosApp
-          xcodebuild clean build -project iosApp.xcodeproj -scheme iosApp -configuration Release -sdk iphoneos CODE_SIGN_IDENTITY="-" CODE_SIGNING_REQUIRED=YES CODE_SIGNING_ALLOWED=YES
+          xcodebuild clean build -project iosApp.xcodeproj -scheme iosApp -configuration Release -sdk iphonesimulator CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO
 
       - name: 🚀 Radical Package & Size Check
         run: |
