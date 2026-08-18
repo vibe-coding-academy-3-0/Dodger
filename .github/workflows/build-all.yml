@@ -68,7 +68,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: 🔨 Force KMP Framework Compilation
-        run: ./gradlew :app:linkReleaseFrameworkIosSimulatorArm64
+        run: ./gradlew :app:linkReleaseFrameworkIosSimulatorArm64 --no-configuration-cache
 
       - name: 📦 Inject Framework to Xcode
         run: |

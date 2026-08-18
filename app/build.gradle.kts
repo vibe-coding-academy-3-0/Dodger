@@ -94,24 +94,26 @@ kotlin {
 listOf("Release", "Debug").forEach { buildType ->
     listOf("IosSimulatorArm64", "IosArm64", "IosX64").forEach { targetArch ->
         val taskName = "link${buildType}Framework$targetArch"
+        val archDir = when (targetArch) {
+            "IosSimulatorArm64" -> "iosSimulatorArm64"
+            "IosArm64" -> "iosArm64"
+            else -> "iosX64"
+        }
+        val confDir = if (buildType == "Release") "releaseFramework" else "debugFramework"
+        val frameworkDir = layout.buildDirectory.dir("bin/$archDir/$confDir/ComposeApp.framework")
+        
         tasks.register(taskName) {
             group = "build"
             description = "Links $buildType framework for $targetArch"
+            val targetDir = frameworkDir.get().asFile
             doLast {
-                val archDir = when (targetArch) {
-                    "IosSimulatorArm64" -> "iosSimulatorArm64"
-                    "IosArm64" -> "iosArm64"
-                    else -> "iosX64"
-                }
-                val confDir = if (buildType == "Release") "releaseFramework" else "debugFramework"
-                val frameworkDir = file("${project.buildDir}/bin/$archDir/$confDir/ComposeApp.framework")
-                val headersDir = file("$frameworkDir/Headers")
-                val modulesDir = file("$frameworkDir/Modules")
+                val headersDir = File(targetDir, "Headers")
+                val modulesDir = File(targetDir, "Modules")
                 
                 headersDir.mkdirs()
                 modulesDir.mkdirs()
                 
-                file("$frameworkDir/Info.plist").writeText("""<?xml version="1.0" encoding="UTF-8"?>
+                File(targetDir, "Info.plist").writeText("""<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
@@ -133,7 +135,7 @@ listOf("Release", "Debug").forEach { buildType ->
 </plist>
 """)
                 
-                file("$headersDir/ComposeApp.h").writeText("""
+                File(headersDir, "ComposeApp.h").writeText("""
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
@@ -142,14 +144,14 @@ listOf("Release", "Debug").forEach { buildType ->
 @end
 """)
                 
-                file("$modulesDir/module.modulemap").writeText("""
+                File(modulesDir, "module.modulemap").writeText("""
 framework module ComposeApp {
     umbrella header "ComposeApp.h"
     export *
     module * { export * }
 }
 """)
-                println("Framework created at: ${frameworkDir.absolutePath}")
+                println("Framework created at: ${targetDir.absolutePath}")
             }
         }
     }
