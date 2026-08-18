@@ -86,30 +86,39 @@ jobs:
               build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO || echo "Build completed"
           fi
 
-      - name: Package .app into IPA
+      - name: 🚀 Radical Package & Size Check
         run: |
-          cd iosApp
-          mkdir -p Payload
-          # Ciblage strict du vrai dossier final
-          TARGET_APP="build/Build/Products/Release-iphoneos/iosApp.app"
+          cd ${{ github.workspace }}
+          echo "🔍 Recherche de la plus grosse application générée..."
+          # Trouve le plus gros dossier .app du système
+          LARGEST_APP=$(find . -name "*.app" -type d -exec du -sm {} + | sort -n | tail -1 | cut -f2 | xargs)
           
-          echo "Vérification du dossier cible : $TARGET_APP"
-          if [ -d "$TARGET_APP" ]; then
-            echo "Dossier .app trouvé ! Voici son contenu réel :"
-            ls -la "$TARGET_APP"
-            
-            cp -R "$TARGET_APP" Payload/
-            zip -q -r iosApp-unsigned.ipa Payload
-            
-            echo "Taille finale du fichier IPA généré :"
-            ls -lh iosApp-unsigned.ipa
-          else
-            echo "ERREUR CRITIQUE : Le vrai dossier $TARGET_APP n'existe pas. Le build Xcode a échoué silencieusement ou a compilé ailleurs."
+          if [ -z "$LARGEST_APP" ]; then
+            echo "🚨 ERREUR : Absolument aucun dossier .app trouvé !"
             exit 1
           fi
+          
+          echo "Dossier ciblé : $LARGEST_APP"
+          SIZE=$(du -sm "$LARGEST_APP" | cut -f1)
+          echo "Poids mesuré : $SIZE Mo"
+          
+          # Si l'app pèse moins de 5 Mo, c'est une coquille vide
+          if [ "$SIZE" -lt 5 ]; then
+            echo "🚨 ERREUR FATALE : L'application est vide ($SIZE Mo) ! Xcode a échoué silencieusement ou le binaire n'a pas été lié."
+            echo "Contenu du dossier fantôme :"
+            ls -la "$LARGEST_APP"
+            exit 1
+          fi
+          
+          echo "📦 Application valide ! Emballage en cours..."
+          mkdir -p Payload
+          cp -R "$LARGEST_APP" Payload/
+          zip -q -r SpaceDodger-iOS.ipa Payload
+          echo "✅ Fichier IPA généré avec succès !"
+          ls -lh SpaceDodger-iOS.ipa
 
       - name: Upload iOS IPA
         uses: actions/upload-artifact@v4
         with:
           name: SpaceDodger-iOS-IPA
-          path: iosApp/iosApp-unsigned.ipa
+          path: SpaceDodger-iOS.ipa
