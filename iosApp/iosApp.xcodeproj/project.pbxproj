@@ -204,6 +204,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(SRCROOT)",
+					"$(SRCROOT)/..",
 					"$(SRCROOT)/../build/bin/iosSimulatorArm64/debugFramework",
 					"$(SRCROOT)/../build/bin/iosSimulatorArm64/releaseFramework",
 					"$(SRCROOT)/../build/bin/iosX64/debugFramework",
@@ -245,6 +247,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(SRCROOT)",
+					"$(SRCROOT)/..",
 					"$(SRCROOT)/../build/bin/iosSimulatorArm64/releaseFramework",
 					"$(SRCROOT)/../build/bin/iosSimulatorArm64/debugFramework",
 					"$(SRCROOT)/../build/bin/iosX64/releaseFramework",

@@ -67,7 +67,15 @@ jobs:
       - name: Make Gradlew Executable
         run: chmod +x gradlew
 
-      - name: Build iOS Framework / App
+      - name: 🔨 Force KMP Framework Compilation
+        run: ./gradlew :app:linkReleaseFrameworkIosSimulatorArm64
+
+      - name: 📦 Inject Framework to Xcode
+        run: |
+          echo "Copie du framework KMP dans le dossier iOS..."
+          cp -R app/build/bin/iosSimulatorArm64/releaseFramework/ComposeApp.framework iosApp/ || echo "Attention: Copie échouée, Xcode devra utiliser les search paths."
+
+      - name: 🍏 Build iOS App
         run: |
           cd iosApp
           xcodebuild clean build -project iosApp.xcodeproj -scheme iosApp -configuration Release -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 17" ARCHS=arm64 ONLY_ACTIVE_ARCH=YES ENABLE_USER_SCRIPT_SANDBOXING=NO
