@@ -205,9 +205,15 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../build/bin/iosSimulatorArm64/debugFramework",
+					"$(SRCROOT)/../build/bin/iosSimulatorArm64/releaseFramework",
+					"$(SRCROOT)/../build/bin/iosX64/debugFramework",
+					"$(SRCROOT)/../build/bin/iosX64/releaseFramework",
 					"$(SRCROOT)/../build/bin/iosArm64/debugFramework",
 					"$(SRCROOT)/../build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
 					"$(SRCROOT)/../app/build/bin/iosSimulatorArm64/debugFramework",
+					"$(SRCROOT)/../app/build/bin/iosSimulatorArm64/releaseFramework",
+					"$(SRCROOT)/../app/build/bin/iosX64/debugFramework",
+					"$(SRCROOT)/../app/build/bin/iosX64/releaseFramework",
 					"$(SRCROOT)/../app/build/bin/iosArm64/debugFramework",
 					"$(SRCROOT)/../app/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
 				);
@@ -239,8 +245,16 @@
 				CURRENT_PROJECT_VERSION = 1;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(SRCROOT)/../build/bin/iosSimulatorArm64/releaseFramework",
+					"$(SRCROOT)/../build/bin/iosSimulatorArm64/debugFramework",
+					"$(SRCROOT)/../build/bin/iosX64/releaseFramework",
+					"$(SRCROOT)/../build/bin/iosX64/debugFramework",
 					"$(SRCROOT)/../build/bin/iosArm64/releaseFramework",
 					"$(SRCROOT)/../build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
+					"$(SRCROOT)/../app/build/bin/iosSimulatorArm64/releaseFramework",
+					"$(SRCROOT)/../app/build/bin/iosSimulatorArm64/debugFramework",
+					"$(SRCROOT)/../app/build/bin/iosX64/releaseFramework",
+					"$(SRCROOT)/../app/build/bin/iosX64/debugFramework",
 					"$(SRCROOT)/../app/build/bin/iosArm64/releaseFramework",
 					"$(SRCROOT)/../app/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
 				);
