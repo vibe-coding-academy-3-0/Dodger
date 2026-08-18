@@ -86,30 +86,25 @@ jobs:
               build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO || echo "Build completed"
           fi
 
-      - name: Zip iOS App
+      - name: Package .app into IPA
         run: |
-          if [ -d "iosApp/build/Build/Products/Release-iphoneos" ] && [ -d "iosApp/build/Build/Products/Release-iphoneos/iosApp.app" ]; then
-            cd iosApp/build/Build/Products/Release-iphoneos/
-            zip -r iosApp-Release.zip iosApp.app
-            cp iosApp-Release.zip ../../../../../iosApp-Release.zip 2>/dev/null || true
-            cd -
+          cd iosApp
+          mkdir -p Payload
+          # Trouver automatiquement le dossier .app généré
+          APP_PATH=$(find build -name "*.app" -type d | head -n 1)
+          echo "Application trouvée ici : $APP_PATH"
+          if [ -n "$APP_PATH" ]; then
+            cp -R "$APP_PATH" Payload/
+            zip -r iosApp-unsigned.ipa Payload
+            echo "Taille du fichier IPA généré :"
+            ls -lh iosApp-unsigned.ipa
           else
-            # Recherche dynamique du bundle .app généré et création de l'archive zip
-            APP_PATH=$(find iosApp/build -name "iosApp.app" -type d | head -n 1)
-            if [ -n "$APP_PATH" ]; then
-              APP_DIR=$(dirname "$APP_PATH")
-              cd "$APP_DIR"
-              zip -r iosApp-Release.zip iosApp.app
-              cp iosApp-Release.zip "$GITHUB_WORKSPACE/iosApp-Release.zip" 2>/dev/null || true
-              cd "$GITHUB_WORKSPACE"
-            fi
+            echo "Erreur : Aucun dossier .app trouvé !"
+            exit 1
           fi
 
-      - name: Upload iOS App and Binaries
+      - name: Upload iOS IPA
         uses: actions/upload-artifact@v4
         with:
-          name: SpaceDodger-iOS-App
-          path: |
-            **/iosApp-Release.zip
-            iosApp-Release.zip
-          retention-days: 14
+          name: SpaceDodger-iOS-IPA
+          path: iosApp/iosApp-unsigned.ipa
