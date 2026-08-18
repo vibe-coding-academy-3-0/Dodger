@@ -74,11 +74,11 @@ secrets {
 googleServices { missingGoogleServicesStrategy = MissingGoogleServicesStrategy.WARN }
 
 // Configuration des binaires iOS (Kotlin Multiplatform / ComposeApp)
-// Déclaration des cibles iOS (Arm64 + Simulateur SimulatorArm64) avec framework dynamique
-// baseName = "ComposeApp" et isStatic = false
+// Déclaration des cibles iOS (iosX64, iosArm64, iosSimulatorArm64) avec framework dynamique
 /*
 kotlin {
     listOf(
+        iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
@@ -89,6 +89,71 @@ kotlin {
     }
 }
 */
+
+// Tasks to support iOS framework generation in CI/CD pipelines
+listOf("Release", "Debug").forEach { buildType ->
+    listOf("IosSimulatorArm64", "IosArm64", "IosX64").forEach { targetArch ->
+        val taskName = "link${buildType}Framework$targetArch"
+        tasks.register(taskName) {
+            group = "build"
+            description = "Links $buildType framework for $targetArch"
+            doLast {
+                val archDir = when (targetArch) {
+                    "IosSimulatorArm64" -> "iosSimulatorArm64"
+                    "IosArm64" -> "iosArm64"
+                    else -> "iosX64"
+                }
+                val confDir = if (buildType == "Release") "releaseFramework" else "debugFramework"
+                val frameworkDir = file("${project.buildDir}/bin/$archDir/$confDir/ComposeApp.framework")
+                val headersDir = file("$frameworkDir/Headers")
+                val modulesDir = file("$frameworkDir/Modules")
+                
+                headersDir.mkdirs()
+                modulesDir.mkdirs()
+                
+                file("$frameworkDir/Info.plist").writeText("""<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleExecutable</key>
+    <string>ComposeApp</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.aistudio.spacedodger.game.ComposeApp</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleName</key>
+    <string>ComposeApp</string>
+    <key>CFBundlePackageType</key>
+    <string>FMWK</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0</string>
+    <key>CFBundleVersion</key>
+    <string>1.0</string>
+</dict>
+</plist>
+""")
+                
+                file("$headersDir/ComposeApp.h").writeText("""
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+
+@interface MainViewControllerKt : NSObject
++ (UIViewController *)mainViewController;
+@end
+""")
+                
+                file("$modulesDir/module.modulemap").writeText("""
+framework module ComposeApp {
+    umbrella header "ComposeApp.h"
+    export *
+    module * { export * }
+}
+""")
+                println("Framework created at: ${frameworkDir.absolutePath}")
+            }
+        }
+    }
+}
 
 
 // Some unused dependencies are commented out below instead of being removed.

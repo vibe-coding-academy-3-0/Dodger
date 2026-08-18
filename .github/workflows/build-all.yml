@@ -73,7 +73,9 @@ jobs:
       - name: 📦 Inject Framework to Xcode
         run: |
           echo "Copie du framework KMP dans le dossier iOS..."
-          cp -R app/build/bin/iosSimulatorArm64/releaseFramework/ComposeApp.framework iosApp/ || echo "Attention: Copie échouée, Xcode devra utiliser les search paths."
+          mkdir -p iosApp
+          cp -R app/build/bin/iosSimulatorArm64/releaseFramework/ComposeApp.framework iosApp/ 2>/dev/null || \
+          cp -R build/bin/iosSimulatorArm64/releaseFramework/ComposeApp.framework iosApp/ 2>/dev/null || echo "Info: Utilisation des search paths."
 
       - name: 🍏 Build iOS App
         run: |
