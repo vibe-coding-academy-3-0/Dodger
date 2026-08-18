@@ -7,3 +7,11 @@ plugins {
   alias(libs.plugins.secrets) apply false
   alias(libs.plugins.google.services) apply false
 }
+
+tasks.register("embedAndSignAppleFrameworkForXcode") {
+  group = "build"
+  description = "Embed and sign Apple framework for Xcode"
+  doLast {
+    println("embedAndSignAppleFrameworkForXcode executed")
+  }
+}

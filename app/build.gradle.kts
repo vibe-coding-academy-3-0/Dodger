@@ -74,12 +74,11 @@ secrets {
 googleServices { missingGoogleServicesStrategy = MissingGoogleServicesStrategy.WARN }
 
 // Configuration des binaires iOS (Kotlin Multiplatform / ComposeApp)
-// Framework dynamique obligatoire pour générer la tâche Xcode embedAndSignAppleFrameworkForXcode
+// Déclaration des cibles iOS (Arm64 + Simulateur SimulatorArm64) avec framework dynamique
 // baseName = "ComposeApp" et isStatic = false
 /*
 kotlin {
     listOf(
-        iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
