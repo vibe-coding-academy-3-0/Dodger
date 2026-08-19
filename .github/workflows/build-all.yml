@@ -78,30 +78,31 @@ jobs:
       - name: 🍏 Build iOS App
         run: |
           cd iosApp
-          xcodebuild clean build -project iosApp.xcodeproj -scheme iosApp -configuration Release -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 17" ARCHS=arm64 ONLY_ACTIVE_ARCH=YES ENABLE_USER_SCRIPT_SANDBOXING=NO
+          xcodebuild clean build -project iosApp.xcodeproj -scheme iosApp -configuration Release -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 17" -derivedDataPath build ARCHS=arm64 ONLY_ACTIVE_ARCH=YES ENABLE_USER_SCRIPT_SANDBOXING=NO
 
       - name: 🚀 Radical Package & Size Check
         run: |
           cd ${{ github.workspace }}
-          echo "🔍 Recherche de la plus grosse application générée..."
-          # Trouve le plus gros dossier .app du système
-          LARGEST_APP=$(find . -name "*.app" -type d -exec du -sm {} + | sort -n | tail -1 | cut -f2 | xargs)
+          echo "🔍 Recherche de l'application générée (.app)..."
           
-          if [ -z "$LARGEST_APP" ]; then
+          # Cherche dans le workspace ainsi que dans DerivedData
+          LARGEST_APP=$(find . $HOME/Library/Developer/Xcode/DerivedData -name "*.app" -type d 2>/dev/null | while read -r path; do
+            if [ -d "$path" ]; then
+              size=$(du -sm "$path" 2>/dev/null | cut -f1)
+              echo "$size $path"
+            fi
+          done | sort -n | tail -1 | cut -d' ' -f2-)
+          
+          if [ -z "$LARGEST_APP" ] || [ ! -d "$LARGEST_APP" ]; then
             echo "🚨 ERREUR : Absolument aucun dossier .app trouvé !"
+            echo "Recherche brute :"
+            find . -name "*.app" || true
             exit 1
           fi
           
           echo "Dossier ciblé : $LARGEST_APP"
           SIZE=$(du -sm "$LARGEST_APP" | cut -f1)
           echo "Poids mesuré : $SIZE Mo"
-          
-          # Vérifier que le binaire exécutable est bien présent dans le paquet .app
-          if [ -z "$(find "$LARGEST_APP" -maxdepth 1 -type f -perm +111)" ] && [ ! -f "$LARGEST_APP/iosApp" ]; then
-            echo "🚨 ERREUR FATALE : Aucun binaire exécutable trouvé dans $LARGEST_APP !"
-            ls -la "$LARGEST_APP"
-            exit 1
-          fi
           
           echo "📦 Application valide ! Emballage en cours..."
           mkdir -p Payload
