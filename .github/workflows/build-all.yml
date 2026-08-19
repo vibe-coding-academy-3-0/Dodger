@@ -67,11 +67,8 @@ jobs:
       - name: Make Gradlew Executable
         run: chmod +x gradlew
 
-      - name: 🔨 Force KMP Framework Compilation
-        run: |
-          ./gradlew :app:linkReleaseFrameworkIosArm64 --no-configuration-cache
-          chmod +x scripts/prepare_ios_framework.sh
-          ./scripts/prepare_ios_framework.sh iphoneos
+      - name: 🔨 Compile Real KMP Framework
+        run: ./gradlew :app:linkReleaseFrameworkIosArm64 --no-configuration-cache
 
       - name: 🍏 Build Unsigned iOS App
         run: |
