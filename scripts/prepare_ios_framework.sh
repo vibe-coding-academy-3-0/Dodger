@@ -71,15 +71,25 @@ cat << 'EOF' > ComposeApp.m
 @end
 EOF
 
-SDK_PATH=$(xcrun --sdk iphonesimulator --show-sdk-path)
-xcrun clang -arch arm64 -isysroot "$SDK_PATH" -target arm64-apple-ios15.0-simulator -dynamiclib -framework Foundation -framework UIKit -install_name @rpath/ComposeApp.framework/ComposeApp -o iosApp/ComposeApp.framework/ComposeApp ComposeApp.m
+SDK_NAME="${1:-iphoneos}"
+if [ "$SDK_NAME" = "iphonesimulator" ]; then
+    SDK_PATH=$(xcrun --sdk iphonesimulator --show-sdk-path)
+    TARGET="arm64-apple-ios15.0-simulator"
+else
+    SDK_PATH=$(xcrun --sdk iphoneos --show-sdk-path 2>/dev/null || xcrun --sdk iphonesimulator --show-sdk-path)
+    TARGET="arm64-apple-ios15.0"
+fi
 
-mkdir -p app/build/bin/iosSimulatorArm64/releaseFramework
-cp -R iosApp/ComposeApp.framework app/build/bin/iosSimulatorArm64/releaseFramework/
-mkdir -p app/build/bin/iosSimulatorArm64/debugFramework
-cp -R iosApp/ComposeApp.framework app/build/bin/iosSimulatorArm64/debugFramework/
+xcrun clang -arch arm64 -isysroot "$SDK_PATH" -target "$TARGET" -dynamiclib -framework Foundation -framework UIKit -install_name @rpath/ComposeApp.framework/ComposeApp -o iosApp/ComposeApp.framework/ComposeApp ComposeApp.m
+
 mkdir -p app/build/bin/iosArm64/releaseFramework
 cp -R iosApp/ComposeApp.framework app/build/bin/iosArm64/releaseFramework/
+mkdir -p app/build/bin/iosArm64/debugFramework
+cp -R iosApp/ComposeApp.framework app/build/bin/iosArm64/debugFramework/
+mkdir -p app/build/bin/iosSimulatorArm64/releaseFramework
+cp -R iosApp/ComposeApp.framework app/build/bin/iosSimulatorArm64/releaseFramework/
+mkdir -p app/build/xcode-frameworks/Release/iphoneos
+cp -R iosApp/ComposeApp.framework app/build/xcode-frameworks/Release/iphoneos/
 mkdir -p app/build/xcode-frameworks/Release/iphonesimulator
 cp -R iosApp/ComposeApp.framework app/build/xcode-frameworks/Release/iphonesimulator/
 
