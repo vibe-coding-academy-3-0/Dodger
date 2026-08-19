@@ -62,7 +62,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A100000E29B7F12300000001 /* Build configuration list for PBXNativeTarget "iosApp" */;
 			buildPhases = (
-				A100000C29B7F12300000001 /* Run Script (Compile Kotlin Framework) */,
 				A100000D29B7F12300000001 /* Sources */,
 				A100000729B7F12300000001 /* Frameworks */,
 			);
@@ -107,27 +106,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		A100000C29B7F12300000001 /* Run Script (Compile Kotlin Framework) */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Run Script (Compile Kotlin Framework)";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "cd \"$SRCROOT/..\"\n./gradlew :embedAndSignAppleFrameworkForXcode || ./gradlew :app:embedAndSignAppleFrameworkForXcode || true\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A100000D29B7F12300000001 /* Sources */ = {
@@ -202,23 +180,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)",
-					"$(SRCROOT)/..",
-					"$(SRCROOT)/../build/bin/iosSimulatorArm64/debugFramework",
-					"$(SRCROOT)/../build/bin/iosSimulatorArm64/releaseFramework",
-					"$(SRCROOT)/../build/bin/iosX64/debugFramework",
-					"$(SRCROOT)/../build/bin/iosX64/releaseFramework",
-					"$(SRCROOT)/../build/bin/iosArm64/debugFramework",
-					"$(SRCROOT)/../build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
-					"$(SRCROOT)/../app/build/bin/iosSimulatorArm64/debugFramework",
-					"$(SRCROOT)/../app/build/bin/iosSimulatorArm64/releaseFramework",
-					"$(SRCROOT)/../app/build/bin/iosX64/debugFramework",
-					"$(SRCROOT)/../app/build/bin/iosX64/releaseFramework",
-					"$(SRCROOT)/../app/build/bin/iosArm64/debugFramework",
-					"$(SRCROOT)/../app/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
-				);
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = iosApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -226,11 +187,6 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-framework",
-					"ComposeApp",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.aistudio.spacedodger.game;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -245,23 +201,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)",
-					"$(SRCROOT)/..",
-					"$(SRCROOT)/../build/bin/iosSimulatorArm64/releaseFramework",
-					"$(SRCROOT)/../build/bin/iosSimulatorArm64/debugFramework",
-					"$(SRCROOT)/../build/bin/iosX64/releaseFramework",
-					"$(SRCROOT)/../build/bin/iosX64/debugFramework",
-					"$(SRCROOT)/../build/bin/iosArm64/releaseFramework",
-					"$(SRCROOT)/../build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
-					"$(SRCROOT)/../app/build/bin/iosSimulatorArm64/releaseFramework",
-					"$(SRCROOT)/../app/build/bin/iosSimulatorArm64/debugFramework",
-					"$(SRCROOT)/../app/build/bin/iosX64/releaseFramework",
-					"$(SRCROOT)/../app/build/bin/iosX64/debugFramework",
-					"$(SRCROOT)/../app/build/bin/iosArm64/releaseFramework",
-					"$(SRCROOT)/../app/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
-				);
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = iosApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -269,11 +208,6 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-framework",
-					"ComposeApp",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.aistudio.spacedodger.game;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
